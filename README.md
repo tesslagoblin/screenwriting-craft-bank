@@ -1,4 +1,4 @@
-# Craft Bank
+# Screenwriting Craft Bank
 
 A skill for turning "that was really good" into something you can actually use
 later. You talk about a show you are watching, and it files a technique card
@@ -63,8 +63,8 @@ skills folder, or just paste it into a conversation and say "follow this."
 **If you want the Notion side:**
 
 ```bash
-git clone https://github.com/tesslagoblin/craft-bank.git
-cd craft-bank
+git clone https://github.com/tesslagoblin/screenwriting-craft-bank.git
+cd screenwriting-craft-bank
 ```
 
 Build a database with the properties listed in `templates/notion-schema.md`,
