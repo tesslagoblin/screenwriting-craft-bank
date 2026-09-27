@@ -1,0 +1,12 @@
+# Never commit raw source material or credentials
+.env
+*.env
+raw/
+verbatim/
+secrets/
+
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
