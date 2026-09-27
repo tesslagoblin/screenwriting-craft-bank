@@ -59,7 +59,7 @@ They still own the cue. Never auto-card without it.
 
 ### 4. Card structure
 
-Every card, no exceptions. Two layers. See `templates/card-template.md`.
+Every card, no exceptions. Two layers. See `templates/card-template.md` in this skill's folder.
 
 ### 5. Verbatim is the receipt
 

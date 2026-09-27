@@ -4,6 +4,10 @@ A skill for turning "that was really good" into something you can actually use
 later. You talk about a show you are watching, and it files a technique card
 with your own words preserved next to the analysis.
 
+See [examples/sample-card.md](examples/sample-card.md). The best line on it is
+the raw reaction, not the analysis: "she cant compete on pretty so she competes
+on chaos."
+
 ## Why I built this
 
 I kept noticing smart things in other people's shows and then losing them. A
@@ -31,9 +35,11 @@ get replaced, only added to.
    (the mechanic, when to use it, tags), and a page body with your raw words
    untouched on top and the analysis underneath.
 
-4. **Same mechanic, new show?** It gets appended to the existing card rather than
-   making a near-duplicate, so techniques accumulate examples instead of
-   scattering.
+4. **Same mechanic, new show?** When the assistant recognises a mechanic you
+   have already banked, it adds the new example to the existing card rather
+   than making a near-duplicate, so techniques accumulate examples instead of
+   scattering. The script only creates new cards for now. Automatic duplicate
+   detection is on the build-next list.
 
 <!-- Screenshot 1 goes here: the Craft Bank database in table view, filtered by a tag, showing a dozen technique cards -> docs/screenshot-table.png -->
 
@@ -53,12 +59,13 @@ examples/             an invented sample card so you can see the shape
 - **Claude** as the thinking partner and the thing that writes the cards
 - **Notion** as the library, through its API
 - **Python**, standard library only, no dependencies
-- A couple of years of watching TV and forgetting things
 
 ## How to use it yourself
 
-**The skill on its own needs nothing.** Drop `SKILL.md` into your assistant's
-skills folder, or just paste it into a conversation and say "follow this."
+**The skill on its own needs nothing.** For Claude Code, copy the whole folder
+to `~/.claude/skills/craft-bank/` so `SKILL.md` sits at the top and can find
+`templates/`. Or paste `SKILL.md` (and `templates/card-template.md`) into a
+conversation and say "follow this."
 
 **If you want the Notion side:**
 
@@ -89,6 +96,10 @@ visible backfill stub in the Original Thoughts section and tells you the card is
 incomplete. That is deliberate. A card without your original reaction is a card
 you will not trust in six months.
 
+Add `--dry-run` to print the card it would create without calling Notion. No
+API key or database ID needed for that, so it is a good way to check your files
+first.
+
 You will need to share the database with your Notion integration first, or the
 API will tell you it does not exist.
 
@@ -96,14 +107,16 @@ API will tell you it does not exist.
 
 ## The rules, in short
 
-1. Show observation goes here, not into your own project notes. The application
-   to your work lives inside the card.
-2. Think first, card second. Never card before they ask.
-3. Nudge them to wrap when the conversation drifts or runs long. Do not nag.
-4. Every card gets both layers.
-5. Verbatim is the receipt. Never paraphrase it away.
-6. Same mechanic, different show, append rather than duplicate.
-7. Say what you saved and where. No silent saves.
+1. Observations about other people's shows go here, not into your own project
+   notes. How it applies to your work lives inside the card.
+2. You think out loud first. Nothing gets carded until you ask for it.
+3. If the conversation drifts or runs long, it will suggest wrapping up once.
+   It will not nag.
+4. Every card gets both layers: the browsable fields and the page body.
+5. Your exact words are the receipt. They never get paraphrased away.
+6. Same mechanic, different show: it adds to the existing card rather than
+   making a duplicate.
+7. It tells you what it saved and where. Nothing is saved silently.
 
 ## What I would build next
 

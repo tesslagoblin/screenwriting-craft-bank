@@ -22,6 +22,9 @@ Usage:
 
     # No verbatim yet? It will write a backfill stub and warn you.
     python create_card.py --technique "..." --show "..." --how "..."
+
+    # See what would be created without touching Notion (no key needed).
+    python create_card.py --technique "..." --verbatim-file raw.txt --dry-run
 """
 
 import argparse
@@ -80,16 +83,36 @@ def quote(text):
             "quote": {"rich_text": [{"text": {"content": text}}]}}
 
 
+def split_text(text, limit=CHUNK):
+    """Split text into pieces of at most `limit` chars, breaking at a newline if
+    there is one in range, otherwise at a space. Only cuts mid-word when a single
+    word is longer than the limit. Nothing is trimmed or dropped, so joining the
+    pieces gives back the original text exactly."""
+    pieces = []
+    while len(text) > limit:
+        window = text[:limit]
+        cut = window.rfind("\n")
+        if cut <= 0:
+            cut = max(window.rfind(" "), window.rfind("\t"))
+        cut = cut + 1 if cut > 0 else limit
+        pieces.append(text[:cut])
+        text = text[cut:]
+    if text:
+        pieces.append(text)
+    return pieces
+
+
 def chunked(text, block_fn):
     """Notion rejects rich_text over 2000 chars. Split long text across blocks."""
-    out = []
-    for i in range(0, len(text), CHUNK):
-        out.append(block_fn(text[i:i + CHUNK]))
-    return out or [block_fn("")]
+    return [block_fn(p) for p in split_text(text)] or [block_fn("")]
 
 
 def read(path):
-    return open(path, encoding="utf-8").read().strip() if path else ""
+    """Read a file, trimming only leading and trailing whitespace."""
+    if not path:
+        return ""
+    with open(path, encoding="utf-8") as f:
+        return f.read().strip()
 
 
 def main():
@@ -107,9 +130,14 @@ def main():
     ap.add_argument("--verbatim-file", help="file holding their raw words, untouched")
     ap.add_argument("--dug-file", help="file holding your synthesis")
     ap.add_argument("--db", default=os.environ.get("CRAFT_BANK_DB"))
+    ap.add_argument("--dry-run", action="store_true",
+                    help="print what would be created without calling the API")
     args = ap.parse_args()
 
-    if not args.db:
+    if args.dry_run and hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+    if not args.db and not args.dry_run:
         sys.exit("Set CRAFT_BANK_DB or pass --db")
 
     verbatim = read(args.verbatim_file)
@@ -138,14 +166,22 @@ def main():
     body.append(heading("Where We Dug"))
     body += chunked(dug, para) if dug else [para("")]
 
-    page = api("pages", {
-        "parent": {"database_id": args.db},
+    payload = {
+        "parent": {"database_id": args.db or "[CRAFT_BANK_DB]"},
         "properties": props,
         "children": body,
-    }, "POST")
+    }
 
-    print(f"Created: {args.technique}")
-    print(f"  {page.get('url','')}")
+    if args.dry_run:
+        print("DRY RUN, nothing sent to Notion. This is the request it would make:\n")
+        print(json.dumps(payload, indent=2, ensure_ascii=False))
+        print(f"\nWould create: {args.technique}")
+        print(f"  {len(body)} blocks, verbatim split into "
+              f"{len(split_text(verbatim)) if verbatim else 0} piece(s)")
+    else:
+        page = api("pages", payload, "POST")
+        print(f"Created: {args.technique}")
+        print(f"  {page.get('url','')}")
     print("  Original Thoughts: " +
           ("verbatim saved" if verbatim else "BACKFILL STUB, go get the verbatim"))
     print("  Where We Dug: " + ("populated" if dug else "EMPTY"))
