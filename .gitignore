@@ -4,6 +4,11 @@
 raw/
 verbatim/
 secrets/
+cards/
+out/
+raw.txt
+*.raw.txt
+synthesis.md
 
 __pycache__/
 *.pyc

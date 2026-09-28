@@ -64,7 +64,12 @@ def api(path, body=None, method="GET"):
         sys.exit(f"Notion API error {e.code}: {e.read().decode()[:400]}")
 
 
-def text_prop(value):
+def text_prop(value, field):
+    """Notion caps a text property at 2000 chars. Cut to fit, but say so."""
+    if len(value) > 2000:
+        print(f"WARNING: {field} is {len(value)} chars. Notion caps a property at "
+              f"2000, so the rest was cut. Move the overflow into the page body.",
+              file=sys.stderr)
     return {"rich_text": [{"text": {"content": value[:2000]}}]} if value else {"rich_text": []}
 
 
@@ -145,12 +150,12 @@ def main():
 
     props = {
         "Technique": {"title": [{"text": {"content": args.technique}}]},
-        "Episode": text_prop(args.episode),
-        "How It Works": text_prop(args.how),
-        "Apply When": text_prop(args.apply_when),
-        "Project Relevance": text_prop(args.relevance),
-        "Additional Examples": text_prop(args.examples),
-        "Source Show": text_prop(args.source_show),
+        "Episode": text_prop(args.episode, "Episode"),
+        "How It Works": text_prop(args.how, "How It Works"),
+        "Apply When": text_prop(args.apply_when, "Apply When"),
+        "Project Relevance": text_prop(args.relevance, "Project Relevance"),
+        "Additional Examples": text_prop(args.examples, "Additional Examples"),
+        "Source Show": text_prop(args.source_show, "Source Show"),
     }
     if args.show:
         props["Show"] = {"select": {"name": args.show}}

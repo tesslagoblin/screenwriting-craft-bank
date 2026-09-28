@@ -60,6 +60,8 @@ examples/             an invented sample card so you can see the shape
 - **Notion** as the library, through its API
 - **Python**, standard library only, no dependencies
 
+Built with my AI assistant, Mr. Shrimp, running on Claude.
+
 ## How to use it yourself
 
 **The skill on its own needs nothing.** For Claude Code, copy the whole folder
@@ -87,9 +89,12 @@ python scripts/create_card.py \
   --how "What the mechanic is." \
   --apply-when "When you would reach for it." \
   --tags "status,misdirection" \
-  --verbatim-file raw.txt \
-  --dug-file synthesis.md
+  --verbatim-file cards/raw.txt \
+  --dug-file cards/synthesis.md
 ```
+
+Keep those files in `cards/`. It is gitignored because it holds your real
+reactions.
 
 If you skip `--verbatim-file` it will still make the card, but it writes a
 visible backfill stub in the Original Thoughts section and tells you the card is
@@ -110,8 +115,8 @@ API will tell you it does not exist.
 1. Observations about other people's shows go here, not into your own project
    notes. How it applies to your work lives inside the card.
 2. You think out loud first. Nothing gets carded until you ask for it.
-3. If the conversation drifts or runs long, it will suggest wrapping up once.
-   It will not nag.
+3. It suggests wrapping up at natural points: a change of topic, a clean
+   takeaway, or a long stretch on one thing. One line each time, never nagging.
 4. Every card gets both layers: the browsable fields and the page body.
 5. Your exact words are the receipt. They never get paraphrased away.
 6. Same mechanic, different show: it adds to the existing card rather than
