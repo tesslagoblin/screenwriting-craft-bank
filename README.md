@@ -132,8 +132,9 @@ API will tell you it does not exist.
   close the loop.
 - **Backfill detection.** A pass that finds cards missing their verbatim and
   chases them, rather than me noticing by accident.
-- **Stacking suggestions.** When a new observation comes in, check whether an
-  existing card already covers the mechanic before making a new one.
+- **Stacking in the script.** Right now the assistant spots repeats in
+  conversation. The script should also check existing cards itself before
+  making a new one.
 
 ## A note on the material
 

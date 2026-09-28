@@ -88,7 +88,7 @@ populated."
 
 The technique lives in the specifics, not the abstraction. Before synthesising,
 ask at least one. Cap at two per round. If they have already given you five or
-more concrete details, skip the questions and write the card.
+more concrete details, skip the questions and offer to wrap. They still give the cue.
 
 - How did [the other character] react?
 - What was the shot? Close on her, wide, the room?

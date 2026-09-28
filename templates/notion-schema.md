@@ -8,9 +8,10 @@ Obsidian, or anything else. This is just what the scripts here expect.
 Create a database with these properties:
 
 - `Technique` - Title
-- `Show` - Select. Seed it with whatever you watch most. New shows can go in
-  `Source Show` until you promote them.
-- `Source Show` - Text
+- `Show` - Select. `create_card.py` writes `--show` here, and Notion adds a new
+  option automatically the first time it sees a show.
+- `Source Show` - Text. Optional, for extra detail on where it came from
+  (a clip, a rewatch, a recommendation).
 - `Episode` - Text
 - `How It Works` - Text
 - `Apply When` - Text
